@@ -1,0 +1,114 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+{% if current_user.is_authenticated %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    <b>Unite | View Your Customer Summary </b>
+
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="../../admin"><i class="fa fa-dashboard"></i>Home</a></li>
+    <li class="active">Unite</li>
+  </ol>
+</section>
+
+<section class="content">
+
+  <div class="row">
+    <!-- Left col -->
+    <section class="container">      
+      <form method="POST" class = "example" style="margin:auto;max-width:300px">
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+    </section>
+    <!-- /.Left col -->
+
+  </div>
+  <!-- /.row (main row) -->
+
+  <div class="content-header">
+    <h2>Your Search Result displays below...</h2>           
+    <table class="table table-dark table-hover" style="display: block;overflow: auto;">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, value in result.iteritems()%}
+           <tr>
+                {% if key == "facebook_photos" %}
+                    <th> {{ key }} </th>
+                    {% for i in value %}
+                        <tr> <td><img height="200" width="200" src = {{i}}> </td> </tr>
+                    {% endfor %}
+                {% else %}
+                  <th> {{ key }} </th>
+                  <td> {{ value }} </td>
+                {% endif %}
+           </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- /.content -->
+{% else %}
+
+<center>
+  <section class="content" style="color: white">
+    <div class="col-sm-12">
+      <h1>Unite</h1>
+      <p class="lead">
+        Brigding the gap between Online and Offline
+      </p>
+      <p>
+        --------------explanation of unite------------------
+      </p>
+      {% if not current_user.is_authenticated %}
+      <p>You can register/login as a regular user<br><br>
+
+        <p>
+          <a class="btn btn-primary" href="{{ url_for('security.login') }}">Login</a> <a class="btn btn-default" href="{{ url_for('security.register') }}">Register</a>
+        </p>
+        {% endif %}
+        <br>
+      </div>
+    </section>
+  </center>
+
+<script src='static/Chart.min.js'></script>  
+<script>
+   var pieData = [
+            {% for label,count in pie_chart %}
+                lab = "{{label}}"
+                cnt = "{{count}}"
+                col = "{{red}}"
+            {% endfor %}
+                ];
+ 
+   // get bar chart canvas
+   var mychart = document.getElementById("chart").getContext("2d");
+ 
+   steps = 10
+   max = 10
+   // draw pie chart
+   new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
+     
+</script>
+
+  <br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br>
+
+
+  {% endif %}
+
+  {% endblock body %}
